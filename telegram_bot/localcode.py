@@ -11,7 +11,7 @@ def local_code_check() -> None:
                  (code text PRIMARY KEY, destrict text, loc text)''')
     conn.commit()
     
-    f = open('loc_code.txt')
+    f = open('../loc_code.txt')
     for d in f.readlines():
         data = d.split()
         c.execute('''INSERT OR REPLACE INTO localcode VALUES 
@@ -24,13 +24,14 @@ def local_code_check() -> None:
 
 
 def select_local_code(district: str) -> List[str]:
-    loc = []
+    loc_result = "" 
+    loc_info = []
     conn = sqlite3.connect('local.db')    
     c = conn.cursor()
-   #c.execute("SELECT * FROM localcode WHERE code LIKE '?'", ('%'+district+'%'))
-    c.execute("select * from localcode where loc like ?", ('%'+district+'%',))
+    c.execute("SELECT * FROM localcode WHERE loc LIKE ?", ('%'+district+'%',))
     for data in c.fetchall():
-        loc.append(data)
+        temp = ('%s %s %s\n' % (data[0], data[1], data[2]))
+        loc_result = '%s%s' % (loc_result, temp)
 
-    return loc
-    
+    loc_info.append(loc_result)
+    return loc_info

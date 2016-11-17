@@ -138,7 +138,7 @@ if __name__ == '__main__':
 
     # Read config
     config = configparser.ConfigParser()
-    config.readfp(open('bot.ini'))
+    config.readfp(open('../bot.ini'))
 
     token = config.get('TOKEN', 'telegram')
     log_level = config.getint('LOG', 'level')
