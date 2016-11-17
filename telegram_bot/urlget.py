@@ -100,13 +100,13 @@ def request_all(url: str) -> List[str]:
         info = item.split('|')
 
         if (info[6].strip() == '0'):
-            ret_msg1 = '%s/%s %s %s층 %sm² %s(%s)\n' % (info[5], info[7], info[4],
-                                                     info[11].strip(), info[8],
+            ret_msg1 = '%s/%s %s %s %s층 %sm² %s(%s)\n' % (info[5], info[7], info[2],
+                                                     info[4], info[11].strip(), info[8],
                                                      info[3].strip(), info[6].strip())
             result_msg1 = '%s%s' % (result_msg1, ret_msg1)
         else:
-            ret_msg2 = '%s/%s %s %s층 %sm² %s(%s)\n' % (info[5], info[7], info[4],
-                                                     info[11].strip(), info[8],
+            ret_msg2 = '%s/%s %s %s %s층 %sm² %s(%s)\n' % (info[5], info[7], info[2],
+                                                     info[4], info[11].strip(), info[8],
                                                      info[3].strip(), info[6].strip())
             result_msg2 = '%s%s' % (result_msg2, ret_msg2)
 
