@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 
 import sqlite3
+import os.path
 from typing import List
 
 def local_code_check() -> None:
+    if (os.path.isfile('./local.db')):
+        return
+
     conn = sqlite3.connect('local.db')    
     c = conn.cursor()
     c.execute('''CREATE TABLE IF NOT EXISTS localcode
@@ -21,6 +25,7 @@ def local_code_check() -> None:
 
     f.close()
     conn.close()
+    return
 
 
 def select_local_code(district: str) -> List[str]:
