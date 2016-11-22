@@ -5,7 +5,7 @@ import sqlite3
 import os.path
 from typing import List
 
-def local_code_check() -> None:
+def localcode_db_check() -> None:
     if (os.path.isfile('./local.db')):
         return
 

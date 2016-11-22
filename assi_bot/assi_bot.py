@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import os
 import sys 
-
 import configparser
 import logging
 from typing import List
@@ -11,7 +10,7 @@ import telepot
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 
 from urlget import request_data
-from localcode import (local_code_check, select_local_code)
+from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
 
@@ -143,7 +142,7 @@ def on_callback_query(msg):
 if __name__ == '__main__':
 
     # Check sqlite3 db table, tuple
-    local_code_check()
+    localcode_db_check()
 
     # Read config
     config = configparser.ConfigParser()
