@@ -13,6 +13,8 @@ from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 from urlget import request_data
 from localcode import (local_code_check, select_local_code)
 
+MAX_ARGUMENTS = 10
+
 def sendMessage(chat_id: int, meg: str): 
     try:
         bot.sendMessage(chat_id, meg)
@@ -110,6 +112,10 @@ def on_chat_message(msg):
 
     rcv_msg = msg['text']
     command = rcv_msg.split(' ')
+
+    if (len(command) > 10):
+        sendMessage(chat_id, "Too many argument")
+        return
 
     if command[0] == '/1':
         res_list = get_apt_rent(command)
