@@ -114,9 +114,9 @@ def on_chat_message(msg):
     if command[0] == '/1':
         res_list = get_apt_rent(command)
     elif command[0] == '/2':
-        res_list = get_ty()
-    elif command[0] == '/3':
         res_list = get_loc(command)
+    elif command[0] == '/3':
+        res_list = get_ty()
     else:
         bot_help(chat_id)
         return
