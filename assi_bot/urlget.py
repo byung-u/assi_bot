@@ -47,11 +47,11 @@ def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
         item = re.sub('<.*?>', '|', item)
         info = item.split('|')
 
-        if (info[2] != dong):
+        if (info[3] != dong):
             continue
-        if (info[4] != apt):
+        if (info[5] != apt):
             continue
-        if (info[8] != size):
+        if (info[9] != size):
             continue
 
         for i in range(0, len(info)):
