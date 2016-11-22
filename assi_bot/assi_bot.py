@@ -1,13 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-import os
 import sys 
 import configparser
 import logging
 from typing import List
 
 import telepot
-from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton
 
 from urlget import request_data
 from localcode import (localcode_db_check, select_local_code)
