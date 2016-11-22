@@ -69,9 +69,9 @@ def get_apt_rent(command: List[str]):
     result = []
 
     if (len(command) != 3):
-        loc_code = 11440
-        ymd = 201610
         # use defult
+        loc_code = 11440
+        ymd = 201611
     else:
         loc_code = command[1]
         ymd = command[2]
@@ -88,11 +88,14 @@ def get_apt_rent(command: List[str]):
 def get_loc(command: List[str]):
     result = []
 
+    district = ''
     if (len(command) != 2):
-        result = ['Invalid input']
-        return result
+        # use defult
+        district = '강남구'
+    else:
+        district = command[1]
 
-    result = select_local_code(command[1])
+    result = select_local_code(district)
     return result
  
 
