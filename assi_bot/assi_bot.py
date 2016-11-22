@@ -23,11 +23,11 @@ def sendMessage(chat_id: int, meg: str):
 def bot_help(chat_id: int):
     sendMessage(chat_id, 
 '''
-개인 알림 봇 사용 명령어
-/1 : 아파트 전세 실거래가 
-     /1 11440 201612
-/2 : 내집체크 not yours.   
-     /2
+아파트 전세가
+/1 - 지역 아파트 전세 실거래가 (def: /1 11440 201611)
+/2 - 지역번호 조회 (def: /2 강남구)
+/3 - 내가 거주할 아파트만 조회 (bot.ini 설정 필요)
+     예)서울시 강남구 대치동 76.79m²
 ''')
 
 
