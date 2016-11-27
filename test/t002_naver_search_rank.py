@@ -17,13 +17,11 @@ def t002():
         m = re.search('>\d+위:', opt)
         if (m == None):
             continue
-        idx = opt.find(">")
-        opt = opt[idx+1:]
+        opt = re.sub('<.*?>', '', opt)
         realtime_rank.append(opt)
-
+    
     if (len(realtime_rank) == 0):
         return -1
-
     print("[TEST002][OK]")
     print('\t', realtime_rank)
     return 0
