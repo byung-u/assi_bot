@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import re
-from requests import *
+from requests import get
 from bs4 import BeautifulSoup
 
 def t002():
