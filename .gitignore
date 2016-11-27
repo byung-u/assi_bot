@@ -90,3 +90,5 @@ ENV/
 
 # Sqlite3 file database
 *.db
+
+tags
