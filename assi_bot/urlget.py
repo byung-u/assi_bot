@@ -5,6 +5,7 @@ import re
 import urllib.request
 from bs4 import BeautifulSoup
 from typing import List
+from requests import get
 
 MAX_LENGTH = 1024
 
@@ -144,3 +145,28 @@ def request_data(url: List[str],
         result = request_all(url)
 
     return result
+
+
+def request_naver_rank() -> List[str]:
+
+    url = "http://www.naver.com/"
+    r = get(url)
+
+    soup = BeautifulSoup(r.text, 'html.parser')
+    options = soup.find_all('option')
+    realtime_rank = []
+    result = ""
+
+    for opt in options:
+        opt = str(opt)
+        m = re.search('>\d+위:', opt)
+        if (m == None):
+            continue
+        opt = re.sub('<.*?>', '', opt)
+        result = "%s\n%s" % (result, opt)
+    
+    if (len(result) == 0):
+        realtime_rank = ['Not found']
+
+    realtime_rank.append(result)
+    return realtime_rank

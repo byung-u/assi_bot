@@ -7,7 +7,7 @@ from typing import List
 
 import telepot
 
-from urlget import request_data
+from urlget import (request_data, request_naver_rank)
 from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
@@ -27,8 +27,15 @@ def bot_help(chat_id: int):
 /2 - 지역번호 조회 (def: /2 강남구)
 /3 - 내가 거주할 아파트만 조회 (bot.ini 설정 필요)
      예)서울시 강남구 대치동 76.79m²
+/4 - 네이버 실시간 검색 순위
 ''')
 
+
+def get_naver_search_rank():
+    result = []
+    result = request_naver_rank()
+    return result
+    
 
 def get_ty():
     import datetime
@@ -120,6 +127,8 @@ def on_chat_message(msg):
         res_list = get_loc(command)
     elif command[0] == '/3':
         res_list = get_ty()
+    elif command[0] == '/4':
+        res_list = get_naver_search_rank()
     else:
         bot_help(chat_id)
         return
