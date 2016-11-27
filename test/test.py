@@ -7,11 +7,11 @@ from t001_realstate import t001
 
 if __name__ == '__main__':
     ok = 0
+    nok = 0
 
     # Read config
     config = configparser.ConfigParser()
     config.readfp(open('../bot.ini'))
-
 
     url = config.get('TOKEN', 'apt_rent_url')
     svc_key = config.get('TOKEN', 'apt_rent_key', raw=True)
@@ -23,7 +23,6 @@ if __name__ == '__main__':
         nok += 1
 
     result = (ok - nok) / ok * 100 
-    print('[ RESULT ] : ', result, '%% ')
+    print('\n\n[ RESULT ] ', result, '%, ', (ok - nok),'/', ok)
 
     sys.exit(0)
-            
