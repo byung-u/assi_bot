@@ -5,6 +5,7 @@ import configparser
 
 from t001_realstate import t001
 from t002_naver_search_rank import t002
+from t003_seoul_dust_level import t003
 
 if __name__ == '__main__':
     ok = 0
@@ -18,17 +19,16 @@ if __name__ == '__main__':
     svc_key = config.get('TOKEN', 'apt_rent_key', raw=True)
     request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (url, 11440, 201611, svc_key)
 
-    if (t001(request_url) == 0):
-        ok += 1
-    else:
-        nok += 1
+    if (t001(request_url) == 0): ok += 1
+    else: nok += 1
 
-    if (t002() == 0):
-        ok += 1
-    else:
-        nok += 1
+    if (t002() == 0): ok += 1
+    else: nok += 1
 
-    result = (ok - nok) / ok * 100 
-    print('\n\n[ RESULT ] ', result, '%, ', (ok - nok),'/', ok)
+    if (t003() == 0): ok += 1
+    else: nok += 1
+
+    result = "\n\nOK:%d, NOK:%d" % (ok, nok)
+    print(result)
 
     sys.exit(0)

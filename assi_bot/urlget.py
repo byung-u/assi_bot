@@ -147,6 +147,35 @@ def request_data(url: List[str],
     return result
 
 
+def request_seoul_dust() -> List[str]:
+
+    url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e/xml/ForecastWarningMinuteParticleOfDustService/1/1/';
+
+    req = urllib.request.Request(url)
+    try:
+        res = urllib.request.urlopen(req)
+    except UnicodeEncodeError:
+        print('UnicodeEncodeError')
+        return -1
+
+    data = res.read().decode('utf-8')
+    soup = BeautifulSoup(data, 'html.parser')
+
+    seoul_dust = []
+    result = ""
+
+ 
+    if (len(soup.caistep.string) == 0) or (len(soup.alarm_cndt.string) == 0):   
+        result = '[ERR]: [%s]\n%s' % (soup.caistep.string, soup.alarm_cndt.string)
+        realtime_rank = ['Not found']
+        seoul_dust.append(result)
+    else: # OK
+        result = '\t[%s]\n\t%s' % (soup.caistep.string, soup.alarm_cndt.string)
+        seoul_dust.append(result)
+
+    return seoul_dust
+
+
 def request_naver_rank() -> List[str]:
 
     url = "http://www.naver.com/"

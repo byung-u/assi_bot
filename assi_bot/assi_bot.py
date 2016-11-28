@@ -7,7 +7,7 @@ from typing import List
 
 import telepot
 
-from urlget import (request_data, request_naver_rank)
+from urlget import (request_data, request_naver_rank, request_seoul_dust)
 from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
@@ -47,8 +47,9 @@ class Assi:
 /1 - 지역 아파트 전세 실거래가 (def: /1 11440 201611)
 /2 - 지역번호 조회 (def: /2 강남구)
 /3 - 내가 거주할 아파트만 조회 (bot.ini 설정 필요)
-/4 - 네이버 실시간 검색 순위
      예)서울시 강남구 대치동 76.79m²
+/4 - 서울 미세먼지 농도
+/5 - 네이버 실시간 검색 순위
 '''
         )
 
@@ -88,8 +89,8 @@ class Assi:
     def get_ty(self):
         import datetime
         now = datetime.datetime.now()
-        year = now.year
         month = now.month
+        year = now.year
     
         result_msg = [] 
     
@@ -116,7 +117,13 @@ class Assi:
     
         return result_msg
     
-    
+
+    def get_seoul_dust(self):
+        result = []
+        result = request_seoul_dust()
+        return result
+
+   
     def get_naver_search_rank(self):
         result = []
         result = request_naver_rank()
@@ -146,6 +153,8 @@ def on_chat_message(msg):
     elif command[0] == '/3':
         res_list = assi.get_ty()
     elif command[0] == '/4':
+        res_list = assi.get_seoul_dust()
+    elif command[0] == '/5':
         res_list = assi.get_naver_search_rank()
     else:
         assi.bot_help(chat_id)
