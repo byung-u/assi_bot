@@ -12,98 +12,116 @@ from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
 
-def sendMessage(chat_id: int, meg: str): 
-    try:
-        bot.sendMessage(chat_id, meg)
-    except Exception as e:
-        logging.error(e, exc_info=True)
+class Assi:
+
+    def __init__(self):
+        # Check sqlite3 db table, tuple
+        localcode_db_check()
+
+        # Read config
+        self.config = configparser.ConfigParser()
+        self.config.readfp(open('../bot.ini'))
+        self.telegram_token = self.config.get('TOKEN', 'telegram')
+
+        self.bot = telepot.Bot(self.telegram_token)
+
+        log_level = self.config.getint('LOG', 'level')
+        logging.basicConfig(filename='bot.log', level=log_level)
+        logging.info(self.bot.getMe())
+ 
+        self.apt_rent_url = self.config.get('TOKEN', 'apt_rent_url')
+        self.apt_rent_svckey = self.config.get('TOKEN', 'apt_rent_key', raw=True)
 
 
-def bot_help(chat_id: int):
-    sendMessage(chat_id, 
+    def send(self, chat_id: int, msg: str): 
+        try:
+            self.bot.sendMessage(chat_id, msg)
+        except Exception as e:
+            logging.error(e, exc_info=True)
+    
+    
+    def bot_help(self, chat_id: int):
+        self.bot.sendMessage(chat_id, 
 '''
 아파트 전세가
 /1 - 지역 아파트 전세 실거래가 (def: /1 11440 201611)
 /2 - 지역번호 조회 (def: /2 강남구)
 /3 - 내가 거주할 아파트만 조회 (bot.ini 설정 필요)
-     예)서울시 강남구 대치동 76.79m²
 /4 - 네이버 실시간 검색 순위
-''')
+     예)서울시 강남구 대치동 76.79m²
+'''
+        )
 
-
-def get_naver_search_rank():
-    result = []
-    result = request_naver_rank()
-    return result
-    
-
-def get_ty():
-    import datetime
-    now = datetime.datetime.now()
-    year = now.year
-    month = now.month
-
-    result_msg = [] 
-
-    url = config.get('TOKEN', 'apt_rent_url')
-    svc_key = config.get('TOKEN', 'apt_rent_key', raw=True)
-
-    loc_code = config.get('MY', 'loc_code')
-    dong = config.get('MY', 'dong')
-    apt = config.get('MY', 'apt')
-    size = config.get('MY', 'size')
-
-    init_message = '%s %sm²\n' % (apt, size)
-    result_msg.append(init_message)
-
-    for i in range(2, -1, -1):
-        if (month - i < 10):
-            ymd ='%s0%s' % (year, month-i)
-        else: 
-            ymd ='%s%s' % (year, month-i)
-        request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (url, loc_code, ymd, svc_key)
-
-        res = request_data(request_url, 1, dong, apt, size)
-        for j in res:
-            encoded_res = j.encode('utf-8')
-            result_msg.append(encoded_res)
-
-    return result_msg
-
-
-def get_apt_rent(command: List[str]):
-    result = []
-
-    if (len(command) != 3):
-        # use defult
-        loc_code = 11440
-        ymd = 201611
-    else:
-        loc_code = command[1]
-        ymd = command[2]
-
-    url = config.get('TOKEN', 'apt_rent_url')
-    svc_key = config.get('TOKEN', 'apt_rent_key', raw=True)
-    request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (url, loc_code, ymd, svc_key)
-
-    result = request_data(request_url)
-
-    return result
-
-
-def get_loc(command: List[str]):
-    result = []
-
-    district = ''
-    if (len(command) != 2):
-        # use defult
-        district = '강남구'
-    else:
-        district = command[1]
-
-    result = select_local_code(district)
-    return result
  
+    def get_apt_rent(self, command: List[str]):
+        result = []
+    
+        if (len(command) != 3):
+            # use defult
+            loc_code = 11440
+            ymd = 201611
+        else:
+            loc_code = command[1]
+            ymd = command[2]
+    
+        request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (self.apt_rent_url, 
+                loc_code, ymd, self.apt_rent_svckey)
+    
+        result = request_data(request_url)
+        return result
+
+
+    def get_loc(self, command: List[str]):
+        result = []
+    
+        district = ''
+        if (len(command) != 2):
+            # use defult
+            district = '강남구'
+        else:
+            district = command[1]
+    
+        result = select_local_code(district)
+        return result
+
+
+    def get_ty(self):
+        import datetime
+        now = datetime.datetime.now()
+        year = now.year
+        month = now.month
+    
+        result_msg = [] 
+    
+        loc_code = self.config.get('MY', 'loc_code')
+        dong = self.config.get('MY', 'dong')
+        apt = self.config.get('MY', 'apt')
+        size = self.config.get('MY', 'size')
+    
+        init_message = '%s %sm²\n' % (apt, size)
+        result_msg.append(init_message)
+    
+        for i in range(2, -1, -1):
+            if (month - i < 10):
+                ymd ='%s0%s' % (year, month-i)
+            else: 
+                ymd ='%s%s' % (year, month-i)
+            request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (self.apt_rent_url, 
+                    loc_code, ymd, self.apt_rent_svckey)
+            res = request_data(request_url, 1, dong, apt, size)
+    
+            for j in res:
+                encoded_res = j.encode('utf-8')
+                result_msg.append(encoded_res)
+    
+        return result_msg
+    
+    
+    def get_naver_search_rank(self):
+        result = []
+        result = request_naver_rank()
+        return result
+    
 
 def on_chat_message(msg):
 
@@ -112,32 +130,32 @@ def on_chat_message(msg):
             content_type, chat_type, chat_id)
 
     if content_type != 'text':
-        sendMessage(chat_id, "Only text!")
+        send(chat_id, "Only text!")
 
     rcv_msg = msg['text']
     command = rcv_msg.split(' ')
 
     if (len(command) > 10):
-        sendMessage(chat_id, "Too many argument")
+        send(chat_id, "Too many argument")
         return
 
     if command[0] == '/1':
-        res_list = get_apt_rent(command)
+        res_list = assi.get_apt_rent(command)
     elif command[0] == '/2':
-        res_list = get_loc(command)
+        res_list = assi.get_loc(command)
     elif command[0] == '/3':
-        res_list = get_ty()
+        res_list = assi.get_ty()
     elif command[0] == '/4':
-        res_list = get_naver_search_rank()
+        res_list = assi.get_naver_search_rank()
     else:
-        bot_help(chat_id)
+        assi.bot_help(chat_id)
         return
 
     if (len(res_list) == 0):
-        sendMessage(chat_id, "No result")
+        assi.send(chat_id, "No result")
     else:
         for res in res_list:
-            sendMessage(chat_id, res)
+            assi.send(chat_id, res)
     return
 
 
@@ -148,24 +166,9 @@ def on_callback_query(msg):
 
 if __name__ == '__main__':
 
-    # Check sqlite3 db table, tuple
-    localcode_db_check()
-
-    # Read config
-    config = configparser.ConfigParser()
-    config.readfp(open('../bot.ini'))
-
-    token = config.get('TOKEN', 'telegram')
-    log_level = config.getint('LOG', 'level')
-
-    # Set logging
-    logging.basicConfig(filename='bot.log', level=log_level)
-
-    bot = telepot.Bot(token)
-    logging.info(bot.getMe())
-
-    bot.message_loop({'chat': on_chat_message,
-                      'callback_query': on_callback_query},
-                      run_forever='Listening ...')
+    assi = Assi()
+    assi.bot.message_loop({'chat': on_chat_message,
+                           'callback_query': on_callback_query},
+                           run_forever='Listening ...')
 
     sys.exit(0)
