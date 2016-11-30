@@ -23,6 +23,8 @@ def t001(url):
                                                              info[12], info[9], info[4],
                                                              info[7], info[1])
         print('\t', ret_msg)
+        print('[TEST002][PASS]')
+        print('[TEST003][PASS]')
         return 0
 
     return -1

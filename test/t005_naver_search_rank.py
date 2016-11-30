@@ -4,7 +4,7 @@ import re
 from requests import get
 from bs4 import BeautifulSoup
 
-def t002():
+def t005():
     url = "http://www.naver.com/"
     r = get(url)
 
@@ -22,6 +22,6 @@ def t002():
     
     if (len(realtime_rank) == 0):
         return -1
-    print("[TEST002][OK]")
+    print("[TEST005][OK]")
     print('\t', realtime_rank)
     return 0

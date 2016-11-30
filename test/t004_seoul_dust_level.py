@@ -3,7 +3,7 @@
 import urllib.request
 from bs4 import BeautifulSoup
 
-def t003():
+def t004():
     url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e/xml/ForecastWarningMinuteParticleOfDustService/1/1/';
     
     req = urllib.request.Request(url)
@@ -21,7 +21,7 @@ def t003():
         print(result)
         return -1
     
-    print("\n[TEST003][OK]")
+    print("\n[TEST004][OK]")
     result = '\t[%s]\n\t%s' % (soup.caistep.string, soup.alarm_cndt.string)
     print(result)
     return 0

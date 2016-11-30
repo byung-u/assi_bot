@@ -4,8 +4,10 @@ import sys
 import configparser
 
 from t001_realstate import t001
-from t002_naver_search_rank import t002
-from t003_seoul_dust_level import t003
+# t002, t003 pass
+from t004_seoul_dust_level import t004
+from t005_naver_search_rank import t005
+from t006_postal_code import t006
 
 if __name__ == '__main__':
     ok = 0
@@ -22,10 +24,13 @@ if __name__ == '__main__':
     if (t001(request_url) == 0): ok += 1
     else: nok += 1
 
-    if (t002() == 0): ok += 1
+    if (t004() == 0): ok += 1
     else: nok += 1
 
-    if (t003() == 0): ok += 1
+    if (t005() == 0): ok += 1
+    else: nok += 1
+
+    if (t006() == 0): ok += 1
     else: nok += 1
 
     result = "\n\nOK:%d, NOK:%d" % (ok, nok)
