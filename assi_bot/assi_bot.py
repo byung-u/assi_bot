@@ -137,7 +137,6 @@ class Assi:
 
     def get_postal_code(self, command: List[str]):
         result = []
-        print(len(command))
         if (len(command) != 3):
             req_url = '%s?ServiceKey=%s&countPerPage=10&currentPage=1&srchwrd=독립문로14길 33' % (
                     self.postal_code_url, self.postal_code_key)
@@ -145,7 +144,6 @@ class Assi:
             req_url = '%s?ServiceKey=%s&countPerPage=10&currentPage=1&srchwrd=%s %s' % (
                     self.postal_code_url, self.postal_code_key, 
                     command[1], command[2])
-        print(req_url)
 
         result = request_postal_code(req_url)
         return result
