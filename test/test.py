@@ -8,10 +8,12 @@ from t001_realstate import t001
 from t004_seoul_dust_level import t004
 from t005_naver_search_rank import t005
 from t006_postal_code import t006
+from t007_naver_translate import t007
 
 if __name__ == '__main__':
     ok = 0
     nok = 0
+    not_check = 0
 
     # Read config
     config = configparser.ConfigParser()
@@ -24,6 +26,8 @@ if __name__ == '__main__':
     if (t001(request_url) == 0): ok += 1
     else: nok += 1
 
+    not_check += 2  # t002, t003
+
     if (t004() == 0): ok += 1
     else: nok += 1
 
@@ -33,7 +37,10 @@ if __name__ == '__main__':
     if (t006() == 0): ok += 1
     else: nok += 1
 
-    result = "\n\nOK:%d, NOK:%d" % (ok, nok)
+    if (t007() == 0): ok += 1
+    else: nok += 1
+
+    result = "\n\nOK:%d, PASS:%d, NOK:%d" % (ok, not_check, nok)
     print(result)
 
     sys.exit(0)
