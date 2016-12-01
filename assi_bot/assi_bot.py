@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
 import sys 
 import configparser
@@ -7,7 +7,8 @@ from typing import List
 
 import telepot
 
-from urlget import (request_data, request_naver_rank, request_seoul_dust)
+from urlget import (request_data, request_naver_rank, request_seoul_dust,
+                    request_postal_code)
 from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
@@ -32,8 +33,11 @@ class Assi:
         self.apt_rent_url = self.config.get('TOKEN', 'apt_rent_url')
         self.apt_rent_svckey = self.config.get('TOKEN', 'apt_rent_key', raw=True)
 
+        self.postal_code_url = self.config.get('TOKEN', 'postal_code_url')
+        self.postal_code_key = self.config.get('TOKEN', 'postal_code_key', raw=True)
 
     def send(self, chat_id: int, msg: str): 
+        print(chat_id)
         try:
             self.bot.sendMessage(chat_id, msg)
         except Exception as e:
@@ -50,6 +54,7 @@ class Assi:
      예)서울시 강남구 대치동 76.79m²
 /4 - 서울 미세먼지 농도
 /5 - 네이버 실시간 검색 순위
+/6 - 우편번호 검색 (def: /6 독립문로14길 33)
 '''
         )
 
@@ -128,6 +133,22 @@ class Assi:
         result = []
         result = request_naver_rank()
         return result
+
+
+    def get_postal_code(self, command: List[str]):
+        result = []
+        print(len(command))
+        if (len(command) != 3):
+            req_url = '%s?ServiceKey=%s&countPerPage=10&currentPage=1&srchwrd=독립문로14길 33' % (
+                    self.postal_code_url, self.postal_code_key)
+        else:
+            req_url = '%s?ServiceKey=%s&countPerPage=10&currentPage=1&srchwrd=%s %s' % (
+                    self.postal_code_url, self.postal_code_key, 
+                    command[1], command[2])
+        print(req_url)
+
+        result = request_postal_code(req_url)
+        return result
     
 
 def on_chat_message(msg):
@@ -156,6 +177,8 @@ def on_chat_message(msg):
         res_list = assi.get_seoul_dust()
     elif command[0] == '/5':
         res_list = assi.get_naver_search_rank()
+    elif command[0] == '/6':
+        res_list = assi.get_postal_code(command)
     else:
         assi.bot_help(chat_id)
         return

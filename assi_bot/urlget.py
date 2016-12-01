@@ -198,3 +198,17 @@ def request_naver_rank() -> List[str]:
 
     realtime_rank.append(result)
     return realtime_rank
+
+
+def request_postal_code(req_url) -> List[str]:
+    postal_code = []
+    r = get(req_url)
+    soup = BeautifulSoup(r.text, 'html.parser')
+    if (len(soup.zipno.string) == 0):
+        realtime_rank = ['Not found']
+    else:
+        result = "우편번호: %s\n주소: %s" % (
+                soup.zipno.string, soup.lnmadres.string)
+        
+    postal_code.append(result)
+    return postal_code
