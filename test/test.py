@@ -22,7 +22,6 @@ if __name__ == '__main__':
     url = config.get('TOKEN', 'apt_rent_url')
     svc_key = config.get('TOKEN', 'apt_rent_key', raw=True)
     request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (url, 11440, 201611, svc_key)
-
     if (t001(request_url) == 0): ok += 1
     else: nok += 1
 
@@ -37,7 +36,9 @@ if __name__ == '__main__':
     if (t006() == 0): ok += 1
     else: nok += 1
 
-    if (t007() == 0): ok += 1
+    n_id = config.get('TOKEN', 'naver_client_id')
+    n_secret = config.get('TOKEN', 'naver_client_secret')
+    if (t007(n_id, n_secret) == 0): ok += 1
     else: nok += 1
 
     result = "\n\nOK:%d, PASS:%d, NOK:%d" % (ok, not_check, nok)
