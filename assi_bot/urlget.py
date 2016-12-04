@@ -6,6 +6,7 @@ import urllib.request
 from bs4 import BeautifulSoup
 from typing import List
 from requests import get
+import json
 
 MAX_LENGTH = 1024
 
@@ -198,3 +199,31 @@ def request_postal_code(req_url) -> List[str]:
         
     postal_code.append(result)
     return postal_code
+
+
+def request_naver_translate(n_id, n_secret, command) -> List[str]:
+    output = []
+
+    input_str = ' '.join(command[1:])
+    encText = urllib.parse.quote(input_str)
+
+    data = "source=ko&target=en&text=" + encText
+    url = "https://openapi.naver.com/v1/language/translate"
+
+    req = urllib.request.Request(url)
+    req.add_header("X-Naver-Client-Id", n_id)
+    req.add_header("X-Naver-Client-Secret", n_secret)
+    response = urllib.request.urlopen(req, data=data.encode("utf-8"))
+
+    rescode = response.getcode()
+    if(rescode==200):
+        data = response.read()
+        data = data.decode('utf-8')
+        js = json.loads(data)
+        result = '입력: %s\n결과: %s\n' % (input_str, 
+                js['message']['result']['translatedText'])
+        output.append(result)
+    else:
+        output.append(['Error'])
+
+    return output

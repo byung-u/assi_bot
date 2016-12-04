@@ -8,7 +8,7 @@ from typing import List
 import telepot
 
 from urlget import (request_data, request_naver_rank, request_seoul_dust,
-                    request_postal_code)
+                    request_postal_code, request_naver_translate)
 from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
@@ -35,6 +35,9 @@ class Assi:
 
         self.postal_code_url = self.config.get('TOKEN', 'postal_code_url')
         self.postal_code_key = self.config.get('TOKEN', 'postal_code_key', raw=True)
+
+        self.n_id = self.config.get('TOKEN', 'naver_client_id')
+        self.n_secret = self.config.get('TOKEN', 'naver_client_secret')
 
     def send(self, chat_id: int, msg: str): 
         print(chat_id)
@@ -149,6 +152,15 @@ class Assi:
         return result
     
 
+    def get_naver_translate(self, command: List[str]):
+        if (len(command) < 2):
+            return ['입력 없음']
+
+        result = []
+        result = request_naver_translate(self.n_id, self.n_secret, command)
+        return result
+    
+
 def on_chat_message(msg):
 
     content_type, chat_type, chat_id = telepot.glance(msg)
@@ -177,6 +189,8 @@ def on_chat_message(msg):
         res_list = assi.get_naver_search_rank()
     elif command[0] == '/6':
         res_list = assi.get_postal_code(command)
+    elif command[0] == '/7':
+        res_list = assi.get_naver_translate(command)
     else:
         assi.bot_help(chat_id)
         return
