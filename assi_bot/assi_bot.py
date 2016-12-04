@@ -40,7 +40,6 @@ class Assi:
         self.n_secret = self.config.get('TOKEN', 'naver_client_secret')
 
     def send(self, chat_id: int, msg: str): 
-        print(chat_id)
         try:
             self.bot.sendMessage(chat_id, msg)
         except Exception as e:
@@ -58,6 +57,8 @@ class Assi:
 /4 - 서울 미세먼지 농도
 /5 - 네이버 실시간 검색 순위
 /6 - 우편번호 검색 (def: /6 독립문로14길 33)
+/7 - 네이버 번역 
+     예)/7 나는 파이썬이 좋아요
 '''
         )
 
