@@ -4,6 +4,7 @@ import re
 from requests import get
 from bs4 import BeautifulSoup
 
+
 def t005():
     url = "http://www.naver.com/"
     r = get(url)
@@ -15,11 +16,11 @@ def t005():
     for opt in options:
         opt = str(opt)
         m = re.search('>\d+위:', opt)
-        if (m == None):
+        if (m is None):
             continue
         opt = re.sub('<.*?>', '', opt)
         realtime_rank.append(opt)
-    
+
     if (len(realtime_rank) == 0):
         return -1
     print("[TEST005][OK]")

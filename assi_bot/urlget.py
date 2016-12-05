@@ -10,8 +10,8 @@ import json
 
 MAX_LENGTH = 1024
 
-def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
 
+def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
 
     result = []
 
@@ -46,20 +46,20 @@ def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
             info[i] = info[i].strip()
 
         if (info[6] == '0'):
-            ret_msg1 = '%s/%s %s층 %s(%s)\n' % (info[6], info[8], info[12],
-                                                info[4], info[7])
+            ret_msg1 = '%s/%s %s층 %s(%s)\n' % (
+                    info[6], info[8], info[12], info[4], info[7])
             result_msg1 = '%s%s' % (result_msg1, ret_msg1)
         else:
-            ret_msg2 = '%s/%s %s층 %s(%s)\n' % (info[6], info[8], info[12],
-                                                info[4], info[7])
+            ret_msg2 = '%s/%s %s층 %s(%s)\n' % (
+                    info[6], info[8], info[12], info[4], info[7])
             result_msg2 = '%s%s' % (result_msg2, ret_msg2)
 
         if (len(result_msg1) > MAX_LENGTH):
             result.append(result_msg1)
-            result_msg1=''
+            result_msg1 = ''
         if (len(result_msg2) > MAX_LENGTH):
             result.append(result_msg2)
-            result_msg2=''
+            result_msg2 = ''
 
     if (len(result_msg1) == 0 and len(result_msg2) == 0 and len(result) == 0):
         result = ['Not found']
@@ -95,22 +95,22 @@ def request_all(url: str) -> List[str]:
             info[i] = info[i].strip()
 
         if (info[6] == '0'):
-            ret_msg1 = '%s %s(%s) %s층 %sm² %s(%s) 준공:%s\n' % (info[3], info[5], info[8], 
-                                                                 info[12], info[9], info[4], 
-                                                                 info[7], info[1])
+            ret_msg1 = '%s %s(%s) %s층 %sm² %s(%s) 준공:%s\n' % (
+                    info[3], info[5], info[8], info[12],
+                    info[9], info[4], info[7], info[1])
             result_msg1 = '%s%s' % (result_msg1, ret_msg1)
         else:
-            ret_msg2 = '%s %s(%s) %s층 %sm² %s(%s) 준공:%s\n' % (info[3], info[5], info[8], 
-                                                                 info[12], info[9], info[4], 
-                                                                 info[7], info[1])
+            ret_msg2 = '%s %s(%s) %s층 %sm² %s(%s) 준공:%s\n' % (
+                    info[3], info[5], info[8], info[12],
+                    info[9], info[4], info[7], info[1])
             result_msg2 = '%s%s' % (result_msg2, ret_msg2)
 
         if (len(result_msg1) > MAX_LENGTH):
             result.append(result_msg1)
-            result_msg1=''
+            result_msg1 = ''
         if (len(result_msg2) > MAX_LENGTH):
             result.append(result_msg2)
-            result_msg2=''
+            result_msg2 = ''
 
     if (len(result_msg1) == 0 and len(result_msg2) == 0 and len(result) == 0):
         result = ['Not found']
@@ -121,8 +121,8 @@ def request_all(url: str) -> List[str]:
     return result
 
 
-def request_data(url: List[str], 
-        specific: int = 0, dong: str = None, 
+def request_data(
+        url: List[str], specific: int = 0, dong: str = None,
         apt: str = None, size: str = None) -> List[str]:
 
     result = []
@@ -136,7 +136,7 @@ def request_data(url: List[str],
 
 def request_seoul_dust() -> List[str]:
 
-    url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e/xml/ForecastWarningMinuteParticleOfDustService/1/1/';
+    url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e/xml/ForecastWarningMinuteParticleOfDustService/1/1/'
 
     req = urllib.request.Request(url)
     try:
@@ -151,11 +151,13 @@ def request_seoul_dust() -> List[str]:
     seoul_dust = []
     result = ""
 
-    if (len(soup.caistep.string) == 0) or (len(soup.alarm_cndt.string) == 0):   
-        result = '[ERR]: [%s]\n%s' % (soup.caistep.string, soup.alarm_cndt.string)
-        realtime_rank = ['Not found']
+    if (len(soup.caistep.string) == 0) or (len(soup.alarm_cndt.string) == 0):
+        result = '[ERR]: [%s]\n%s' % (
+                soup.caistep.string, soup.alarm_cndt.string)
+        result = ['Not found']
         seoul_dust.append(result)
-    else: # OK
+    else:
+        # OK
         result = '\t[%s]\n\t%s' % (soup.caistep.string, soup.alarm_cndt.string)
         seoul_dust.append(result)
 
@@ -175,11 +177,11 @@ def request_naver_rank() -> List[str]:
     for opt in options:
         opt = str(opt)
         m = re.search('>\d+위:', opt)
-        if (m == None):
+        if (m is None):
             continue
         opt = re.sub('<.*?>', '', opt)
         result = "%s\n%s" % (result, opt)
-    
+
     if (len(result) == 0):
         realtime_rank = ['Not found']
 
@@ -192,11 +194,11 @@ def request_postal_code(req_url) -> List[str]:
     r = get(req_url)
     soup = BeautifulSoup(r.text, 'html.parser')
     if (len(soup.zipno.string) == 0):
-        realtime_rank = ['Not found']
+        result = ['Not found']
     else:
         result = "우편번호: %s\n주소: %s" % (
                 soup.zipno.string, soup.lnmadres.string)
-        
+
     postal_code.append(result)
     return postal_code
 
@@ -216,12 +218,12 @@ def request_naver_translate(n_id, n_secret, command) -> List[str]:
     response = urllib.request.urlopen(req, data=data.encode("utf-8"))
 
     rescode = response.getcode()
-    if(rescode==200):
+    if (rescode == 200):
         data = response.read()
         data = data.decode('utf-8')
         js = json.loads(data)
-        result = '입력: %s\n결과: %s\n' % (input_str, 
-                js['message']['result']['translatedText'])
+        result = '입력: %s\n결과: %s\n' % (
+                input_str, js['message']['result']['translatedText'])
         output.append(result)
     else:
         output.append(['Error'])
