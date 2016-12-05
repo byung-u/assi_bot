@@ -61,11 +61,8 @@ def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
             result.append(result_msg2)
             result_msg2 = ''
 
-    if (len(result_msg1) == 0 and len(result_msg2) == 0 and len(result) == 0):
-        result = ['Not found']
-    else:
-        result.append(result_msg1)
-        result.append(result_msg2)
+    result.append(result_msg1)
+    result.append(result_msg2)
     return result
 
 
