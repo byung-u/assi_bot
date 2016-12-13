@@ -7,8 +7,9 @@ from typing import List
 
 import telepot
 
-from urlget import (request_data, request_naver_rank, request_seoul_dust,
-                    request_postal_code, request_naver_translate)
+from urlget import (request_rent, request_trade, request_naver_rank, 
+                    request_seoul_dust, request_postal_code, 
+                    request_naver_translate)
 from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
@@ -31,9 +32,9 @@ class Assi:
         logging.basicConfig(filename='bot.log', level=log_level)
         logging.info(self.bot.getMe())
 
+        self.apt_trade_url = self.config.get('TOKEN', 'apt_trade_url')
         self.apt_rent_url = self.config.get('TOKEN', 'apt_rent_url')
-        self.apt_rent_svckey = self.config.get('TOKEN',
-                                               'apt_rent_key', raw=True)
+        self.apt_svckey = self.config.get('TOKEN', 'apt_key', raw=True)
 
         self.postal_code_url = self.config.get('TOKEN', 'postal_code_url')
         self.postal_code_key = self.config.get('TOKEN',
@@ -60,7 +61,8 @@ class Assi:
 /5 - 네이버 실시간 검색 순위
 /6 - 우편번호 검색 (def: /6 독립문로14길 33)
 /7 - 네이버 번역
-     예)/7 나는 파이썬이 좋아요 ''')
+     예)/7 나는 파이썬이 좋아요 
+/8 - 지역 아파트 매매 실거래가 (def: /8 11440 201611) ''')
 
     def get_apt_rent(self, command: List[str]):
         result = []
@@ -74,9 +76,27 @@ class Assi:
             ymd = command[2]
 
         request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (
-                self.apt_rent_url, loc_code, ymd, self.apt_rent_svckey)
+                self.apt_rent_url, loc_code, ymd, self.apt_svckey)
 
-        result = request_data(request_url)
+        result = request_rent(request_url)
+        return result
+
+ 
+    def get_apt_trade(self, command: List[str]):
+        result = []
+
+        if (len(command) != 3):
+            # use defult
+            loc_code = 11440
+            ymd = 201611
+        else:
+            loc_code = command[1]
+            ymd = command[2]
+
+        request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (
+                self.apt_trade_url, loc_code, ymd, self.apt_svckey)
+
+        result = request_trade(request_url)
         return result
 
     def get_loc(self, command: List[str]):
@@ -113,8 +133,8 @@ class Assi:
             else:
                 ymd = '%s%s' % (year, month - i)
             request_url = '%s?LAWD_CD=%s&DEAL_YMD=%s&serviceKey=%s' % (
-                    self.apt_rent_url, loc_code, ymd, self.apt_rent_svckey)
-            res = request_data(request_url, 1, dong, apt, size)
+                    self.apt_rent_url, loc_code, ymd, self.apt_svckey)
+            res = request_rent(request_url, 1, dong, apt, size)
 
             for j in res:
                 encoded_res = j.encode('utf-8')
@@ -185,6 +205,8 @@ def on_chat_message(msg):
         res_list = assi.get_postal_code(command)
     elif command[0] == '/7':
         res_list = assi.get_naver_translate(command)
+    elif command[0] == '/8':
+        res_list = assi.get_apt_trade(command)
     else:
         assi.bot_help(chat_id)
         return

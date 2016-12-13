@@ -11,7 +11,7 @@ import json
 MAX_LENGTH = 1024
 
 
-def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
+def request_rent_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
 
     result = []
 
@@ -29,6 +29,10 @@ def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
 
     data = res.read().decode('utf-8')
     soup = BeautifulSoup(data, 'html.parser')
+    if (soup.resultcode.string != '00'):
+        result = [soup.resultmsg.string]
+        return result
+
     items = soup.findAll('item')
     for item in items:
         item = item.text
@@ -66,7 +70,7 @@ def request_3month(url: str, dong: str, apt: str, size: str) -> List[str]:
     return result
 
 
-def request_all(url: str) -> List[str]:
+def request_rent_all(url: str) -> List[str]:
 
     req = urllib.request.Request(url)
     try:
@@ -83,6 +87,10 @@ def request_all(url: str) -> List[str]:
 
     data = res.read().decode('utf-8')
     soup = BeautifulSoup(data, 'html.parser')
+    if (soup.resultcode.string != '00'):
+        result = [soup.resultmsg.string]
+        return result
+
     items = soup.findAll('item')
     for item in items:
         item = item.text
@@ -118,15 +126,57 @@ def request_all(url: str) -> List[str]:
     return result
 
 
-def request_data(
+def request_trade(url: str) -> List[str]:
+
+    req = urllib.request.Request(url)
+    try:
+        res = urllib.request.urlopen(req)
+    except UnicodeEncodeError:
+        result = ['Check your input']
+        return result
+
+    result = []
+    result_msg = ''
+
+    data = res.read().decode('utf-8')
+    soup = BeautifulSoup(data, 'html.parser')
+    if (soup.resultcode.string != '00'):
+        result = [soup.resultmsg.string]
+        return result
+
+    items = soup.findAll('item')
+    for item in items:
+        item = item.text
+        item = re.sub('<.*?>', '|', item)
+        info = item.split('|')
+        for i in range(0, len(info)):
+            info[i] = info[i].strip()
+
+            ret_msg = '%s/%s %s %s층 %sm² %s/%s 준공:%s\n' % (
+                                info[4], info[5], info[1], info[-1], 
+                                info[8], info[6], info[7], info[2])
+            result_msg = '%s%s' % (result_msg, ret_msg)
+
+        if (len(result_msg) > MAX_LENGTH):
+            result.append(result_msg)
+
+    if (len(result_msg) == 0 and len(result) == 0):
+        result = ['Not found']
+    else:
+        result.append(result_msg)
+
+    return result
+
+
+def request_rent(
         url: List[str], specific: int = 0, dong: str = None,
         apt: str = None, size: str = None) -> List[str]:
 
     result = []
     if (specific):
-        result = request_3month(url, dong, apt, size)
+        result = request_rent_3month(url, dong, apt, size)
     else:
-        result = request_all(url)
+        result = request_rent_all(url)
 
     return result
 
