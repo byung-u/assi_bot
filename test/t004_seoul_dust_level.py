@@ -18,10 +18,11 @@ def t004():
 
     if (len(soup.caistep.string) == 0) or (len(soup.alarm_cndt.string) == 0):
         result = '[ERR]: [%s]\n%s' % (soup.caistep.string, soup.alarm_cndt.string)
-        print(result)
+        print("[TEST004][Not OK]")
+        print('\t', result)
         return -1
 
-    print("\n[TEST004][OK]")
+    print("[TEST004][OK]")
     result = '\t[%s]\n\t%s' % (soup.caistep.string, soup.alarm_cndt.string)
     print(result)
     return 0

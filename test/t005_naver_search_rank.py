@@ -22,6 +22,7 @@ def t005():
         realtime_rank.append(opt)
 
     if (len(realtime_rank) == 0):
+        print("[TEST005][Not OK]")
         return -1
     print("[TEST005][OK]")
     print('\t', realtime_rank)

@@ -10,6 +10,7 @@ def t006(url, post_key):
 
     soup = BeautifulSoup(r.text, 'html.parser')
     if (len(soup.zipno.string) == 0):
+        print("[TEST006][Not OK]")
         return -1
     print("[TEST006][OK]")
     print('\t우편번호: ', soup.zipno.string)

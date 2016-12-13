@@ -14,6 +14,11 @@ def t001(url):
 
     data = res.read().decode('utf-8')
     soup = BeautifulSoup(data, 'html.parser')
+    if (soup.resultcode.string != '00'):
+        print('[TEST001][Not OK]\t')
+        print('\t', soup.resultmsg.string)
+        return -1
+
     items = soup.findAll('item')
     for item in items:
         item = item.text
@@ -28,4 +33,5 @@ def t001(url):
         print('[TEST003][PASS]')
         return 0
 
+    print('[TEST001][Not OK]\t')
     return -1

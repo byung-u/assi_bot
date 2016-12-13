@@ -16,8 +16,9 @@ def t007(client_id, client_secret):
         data = response.read()
         data = data.decode('utf-8')
         js = json.loads(data)
-        print("[TEST007]")
+        print("[TEST007][OK]")
         print('\t', js['message']['result']['translatedText'])
         return 0
     else:
+        print("[TEST007][Not OK]")
         return -1
