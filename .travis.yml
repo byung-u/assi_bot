@@ -16,6 +16,7 @@ install:
   - python setup.py install
 # command to run tests
 script:
-  - coverage erase
-  - python test/test.py --coverage
-  - coverage combine
+  - make test
+  # - coverage erase
+  # - python test/test.py --coverage
+  # - coverage combine
