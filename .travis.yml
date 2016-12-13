@@ -9,7 +9,7 @@ python:
   - "nightly" # currently points to 3.7-dev
 # command to install dependencies
 install: 
-  - "pip install ."
   - "pip install -r requirements.txt"
+  - "pip install pytest"
 # command to run tests
-script: pytest
+script: py.test -v --color=yes --exitfirst --showlocals --durations=5
