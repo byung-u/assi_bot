@@ -14,7 +14,6 @@ from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
 
-
 class Assi:
 
     def __init__(self):
