@@ -183,8 +183,7 @@ def request_rent(
 
 def request_seoul_dust() -> List[str]:
 
-    url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e'
-    + '/xml/ForecastWarningMinuteParticleOfDustService/1/1/'
+    url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e/xml/ForecastWarningMinuteParticleOfDustService/1/1/'
 
     req = urllib.request.Request(url)
     try:
