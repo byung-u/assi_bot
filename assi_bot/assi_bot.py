@@ -7,12 +7,13 @@ from typing import List
 
 import telepot
 
-from urlget import (request_rent, request_trade, request_naver_rank, 
-                    request_seoul_dust, request_postal_code, 
+from urlget import (request_rent, request_trade, request_naver_rank,
+                    request_seoul_dust, request_postal_code,
                     request_naver_translate)
 from localcode import (localcode_db_check, select_local_code)
 
 MAX_ARGUMENTS = 10
+
 
 class Assi:
 
@@ -60,7 +61,7 @@ class Assi:
 /5 - 네이버 실시간 검색 순위
 /6 - 우편번호 검색 (def: /6 독립문로14길 33)
 /7 - 네이버 번역
-     예)/7 나는 파이썬이 좋아요 
+     예)/7 나는 파이썬이 좋아요
 /8 - 지역 아파트 매매 실거래가 (def: /8 11440 201611) ''')
 
     def get_apt_rent(self, command: List[str]):
@@ -80,7 +81,6 @@ class Assi:
         result = request_rent(request_url)
         return result
 
- 
     def get_apt_trade(self, command: List[str]):
         result = []
 
@@ -154,10 +154,12 @@ class Assi:
     def get_postal_code(self, command: List[str]):
         result = []
         if (len(command) != 3):
-            req_url = '%s?ServiceKey=%s&countPerPage=10&currentPage=1&srchwrd=독립문로14길 33' % (
+            req_url = '%s?ServiceKey=%s&countPerPage=10&'
+            + 'currentPage=1&srchwrd=독립문로14길 33' % (
                     self.postal_code_url, self.postal_code_key)
         else:
-            req_url = '%s?ServiceKey=%s&countPerPage=10&currentPage=1&srchwrd=%s %s' % (
+            req_url = '%s?ServiceKey=%s&countPerPage=10&'
+            + 'currentPage=1&srchwrd=%s %s' % (
                     self.postal_code_url, self.postal_code_key,
                     command[1], command[2])
 
@@ -219,7 +221,8 @@ def on_chat_message(msg):
 
 
 def on_callback_query(msg):
-    query_id, from_id, query_data = telepot.glance(msg, flavor='callback_query')
+    query_id, from_id, query_data = telepot.glance(
+            msg, flavor='callback_query')
     print('callback query :', query_id, from_id, query_data)
 
 

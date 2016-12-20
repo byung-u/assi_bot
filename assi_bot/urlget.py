@@ -153,7 +153,7 @@ def request_trade(url: str) -> List[str]:
             info[i] = info[i].strip()
 
             ret_msg = '%s/%s %s %s층 %sm² %s/%s 준공:%s\n' % (
-                                info[4], info[5], info[1], info[-1], 
+                                info[4], info[5], info[1], info[-1],
                                 info[8], info[6], info[7], info[2])
             result_msg = '%s%s' % (result_msg, ret_msg)
 
@@ -183,7 +183,8 @@ def request_rent(
 
 def request_seoul_dust() -> List[str]:
 
-    url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e/xml/ForecastWarningMinuteParticleOfDustService/1/1/'
+    url = 'http://openAPI.seoul.go.kr:8088/756e6d666b6a656f38346e764e734e'
+    + '/xml/ForecastWarningMinuteParticleOfDustService/1/1/'
 
     req = urllib.request.Request(url)
     try:
